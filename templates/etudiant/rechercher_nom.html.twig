@@ -1,0 +1,37 @@
+ 
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche par nom{% endblock %}
+
+{% block body %}
+    <h1>Résultats de la recherche pour XXXX </h1> // à compléter
+
+    {% if etudiants is empty %}
+        <p>XXXX </p> // à compléter
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                   
+                        
+                        <td>NOM: {{ etudiants }}</td>
+                       
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for etudiant in etudiants %}
+                   <tr>
+                        <td>{{ etudiant.id }}</td>
+                        
+                        <td>{{ etudiant.naissance|date('d/m/Y') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    
+{% endblock %}

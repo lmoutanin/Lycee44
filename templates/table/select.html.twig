@@ -1,0 +1,14 @@
+ 
+
+{{ form_start(form) }}
+    <div class="my-custom-class-for-errors">
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {{ form_widget(form.number, { 'label': 'Entrer un nombre' }) }}    {{ form_widget(form.envoyer, { 'label': 'Envoyer' }) }}
+        </div>
+ 
+    </div>
+{{ form_end(form) }}
