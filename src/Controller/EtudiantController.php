@@ -11,6 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\EtudiantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\SaisirEtudiantType;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class EtudiantController extends AbstractController
@@ -25,10 +26,10 @@ class EtudiantController extends AbstractController
         // Création de l'étudiant
         $etudiant = new Etudiant();
         $etudiant->setNom('JOHN');
-        $etudiant->setPrenom('Lee');
-        $etudiant->setNaissance(new DateTime("2004-09-13"));
+        $etudiant->setPrenom('CAZA');
+        $etudiant->setNaissance(new DateTime("2003-01-13"));
         $etudiant->setNiveau(1);
-        $etudiant->setMail('JOHNLee@gmail.com');
+        $etudiant->setMail('JOHNCaza@gmail.com');
 
         // Prépare Doctrine à sauvegarder l'étudiant (mais n'exécute pas encore la requête SQL)
         $entityManager->persist($etudiant);
@@ -39,7 +40,6 @@ class EtudiantController extends AbstractController
         return new Response('Nouvel étudiant sauvegardé, ID ' . $etudiant->getId());
     }
 
-    // route à placer en dernière position pour éviter les conflits
     #[Route('/etudiant/{id}', name: 'etudiant_id')]
     public function afficher(ManagerRegistry $doctrine, int $id): Response
 
@@ -67,6 +67,7 @@ class EtudiantController extends AbstractController
         return new Response('Le nom de l\'étudiant est : ' . $etudiant->getNom());
     }
 
+
     #[Route('/changement', name: 'changement_niveau')]
     public function changementNiveau(
         EntityManagerInterface $entityManager,
@@ -87,9 +88,10 @@ class EtudiantController extends AbstractController
         return new Response('Modification du niveau pour ' . count($etudiants) . ' étudiant(s).');
     }
 
+
     #[Route('/etudiant/rechercher/nom/{nom}', name: 'etudiant_rechercher_nom')]
     public function rechercherNom(
-        String $nom,String $prenom ,
+        String $nom,
         EtudiantRepository $etudiantRepository
     ) {
 
@@ -120,9 +122,47 @@ class EtudiantController extends AbstractController
         // modification des éléments de l'étudiant
         $etudiant->setNom('ALI');
         $etudiant->setPrenom('Muhammad');
+        $etudiant->setMail('AliMuhammad@gmail.com');
 
         // enregistrement des modifications dans la base de données
         $entityManager->flush();
         return new Response('Modification OK sur : ' . $etudiant->getId());
+    }
+
+    #[Route('/etudiant/create/{id}', name: 'etudiant_new')]
+    public function saisirEtudiant(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        ManagerRegistry $doctrine
+    ) {
+        // Création du formulaire
+        $form = $this->createForm(SaisirEtudiantType::class);
+        $form->handleRequest($request);
+
+        $id = $request->get('id');
+        $etudiant = $doctrine->getRepository(Etudiant::class)->find($id);
+
+        // Si id de étudiant n'existe pas créé un nouvelle étudiant 
+        if (!$etudiant) {
+
+            if (($request->getMethod() == 'POST') && ($form->isValid())) {
+                $etudiant = $form->getData();
+                $entityManager->persist($etudiant);
+                $entityManager->flush();
+                $etudiant = new Etudiant();
+                $form = $this->createForm(SaisirEtudiantType::class, $etudiant);
+            }
+
+            // Si le formulaire n'a pas été soumis ou est invalide, affiche le formulaire
+            return $this->render('etudiant/createEtudiant.html.twig', [
+                'form' => $form->createView(),
+                'etudiant' => $vide= null,
+                'id' => $id 
+            ]);
+        }
+        // Sinon le retourne une page qui affiche ÉTUDIANT N°ID EXISTE DÉJÀ
+        return $this->render('etudiant/createEtudiant.html.twig', [
+            'etudiant' => $id
+        ]);
     }
 }

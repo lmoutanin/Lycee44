@@ -1,37 +1,60 @@
- 
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Recherche par nom{% endblock %}
+{% block title %}Recherche par nom {% endblock %}
+ 
+ 
 
 {% block body %}
-    <h1>Résultats de la recherche pour XXXX </h1> // à compléter
+ <style>
+table { border-collapse: collapse; border: 2px solid rgb(140 140 140); font-family: sans-serif; font-size: 0.8rem; letter-spacing: 1px;}
+caption {caption-side: bottom ; padding: 10px ; font-weight: bold;}
+thead,tfoot {background-color: rgb(228 240 245);}
+th,td {border: 1px solid rgb(160 160 160); padding: 8px 10px; text-align:center;}
+td:last-of-type {text-align: center;}
+tbody > tr:nth-of-type(even) {background-color: rgb(237 238 242);}
+tfoot th {text-align: right;}
+tfoot td {font-weight: bold;}
+</style>
+
+
+    <h1>Résultats de la recherche pour {{nom}} </h1> 
 
     {% if etudiants is empty %}
-        <p>XXXX </p> // à compléter
+        <p>ÉTUDIANT {{nom}} N'EXISTE PAS </p>  
     {% else %}
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                   
-                        
-                        <td>NOM: {{ etudiants }}</td>
-                       
+      
 
-                </tr>
-            </thead>
-            <tbody>
+      <table>
+ 
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+        <th scope="col">NOM</th>
+          <th scope="col">PRENOM</th>
+      <th scope="col">NAISSANCE</th>
+       <th scope="col">NIVEAU</th>
+        <th scope="col">MAIL</th>
+     
+    </tr>
+  </thead>
+
+<tbody>
                 {% for etudiant in etudiants %}
-                   <tr>
+                    <tr>
                         <td>{{ etudiant.id }}</td>
-                        
+                        <td>{{ etudiant.nom }}</td>
+                          <td>{{ etudiant.prenom }}</td>
                         <td>{{ etudiant.naissance|date('d/m/Y') }}</td>
+                          <td>{{ etudiant.niveau }}</td>
+                            <td>{{ etudiant.mail }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
-        </table>
+   
+</table>
+
     {% endif %}
 
-    
+   
 {% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block title %}Créaction Étudiant {% endblock %}
+
+{% block body %}
+<style>
+ label { margin-right:5px;}
+ </style>
+{% if etudiant is empty %}
+
+ {{ form_start(form) }}
+  <h1>Créaction de L'Étudiant N° {{id}} </h1>
+
+{{ form_end(form) }}
+
+ {% else %}
+      
+
+<h1>ÉTUDIANT N° {{etudiant}}  EXISTE DÉJÀ <h1>
+
+ {% endif %}
+ {% endblock %}

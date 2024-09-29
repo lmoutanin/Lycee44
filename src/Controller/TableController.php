@@ -59,7 +59,7 @@ class TableController extends AbstractController
 
         // Vérifie si le formulaire a été soumis et est valide
         //  if ($form->isSubmitted() && $form->isValid()) {
-        if (($req->getMethod()== 'POST') && ($form->isValid())) {
+        if (($req->getMethod() == 'POST') && ($form->isValid())) {
             // Récupère les données soumises
             $dataFormulaire = $form->getData();
 
