@@ -40,20 +40,7 @@ class EtudiantController extends AbstractController
         return new Response('Nouvel étudiant sauvegardé, ID ' . $etudiant->getId());
     }
 
-    #[Route('/etudiant/{id}', name: 'etudiant_id')]
-    public function afficher(ManagerRegistry $doctrine, int $id): Response
 
-    {
-        $etudiant = $doctrine->getRepository(Etudiant::class)->find($id);
-
-        if (!$etudiant) {
-            throw $this->createNotFoundException(
-                'Pas d\'étudiant trouvé avec cet ' . $id
-            );
-        }
-
-        return new Response('Le nom de l\'étudiant est : ' . $etudiant->getNom());
-    }
 
     #[Route('/etudiant/afficher/{id}', name: 'etudiant_afficher')]
     public function afficherAvecRepository(int $id, EtudiantRepository $etudiantRepository): Response
@@ -129,7 +116,7 @@ class EtudiantController extends AbstractController
         return new Response('Modification OK sur : ' . $etudiant->getId());
     }
 
-    #[Route('/etudiant/create/{id}', name: 'etudiant_new')]
+    #[Route('/etudiant/create', name: 'etudiant_new')]
     public function saisirEtudiant(
         Request $request,
         EntityManagerInterface $entityManager,
@@ -140,10 +127,10 @@ class EtudiantController extends AbstractController
         $form->handleRequest($request);
 
         $id = $request->get('id');
-        $etudiant = $doctrine->getRepository(Etudiant::class)->find($id);
+      
 
         // Si id de étudiant n'existe pas créé un nouvelle étudiant 
-        if (!$etudiant) {
+        
 
             if (($request->getMethod() == 'POST') && ($form->isValid())) {
                 $etudiant = $form->getData();
@@ -156,13 +143,28 @@ class EtudiantController extends AbstractController
             // Si le formulaire n'a pas été soumis ou est invalide, affiche le formulaire
             return $this->render('etudiant/createEtudiant.html.twig', [
                 'form' => $form->createView(),
-                'etudiant' => $vide= null,
-                'id' => $id 
+                'etudiant' => $vide = null,
+                'id' => $id
             ]);
+        
+        
+    }
+
+
+
+//Il faut place ce block de code en dernier .Parce que ce dernier va crée des probléme de route il faudra ajouter id à la fin 
+    #[Route('/etudiant/{id}', name: 'etudiant_id')]
+    public function afficher(ManagerRegistry $doctrine, int $id): Response
+
+    {
+        $etudiant = $doctrine->getRepository(Etudiant::class)->find($id);
+
+        if (!$etudiant) {
+            throw $this->createNotFoundException(
+                'Pas d\'étudiant trouvé avec cet ' . $id
+            );
         }
-        // Sinon le retourne une page qui affiche ÉTUDIANT N°ID EXISTE DÉJÀ
-        return $this->render('etudiant/createEtudiant.html.twig', [
-            'etudiant' => $id
-        ]);
+
+        return new Response('Le nom de l\'étudiant est : ' . $etudiant->getNom());
     }
 }
