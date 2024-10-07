@@ -25,7 +25,7 @@ class EtudiantController extends AbstractController
 
         // Création de l'étudiant
         $etudiant = new Etudiant();
-        $etudiant->setNom('JOHN');
+        $etudiant->setNom('JOHNny');
         $etudiant->setPrenom('CAZA');
         $etudiant->setNaissance(new DateTime("2003-01-13"));
         $etudiant->setNiveau(1);
