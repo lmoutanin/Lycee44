@@ -23,6 +23,10 @@ class Absence
     #[ORM\Column(length: 100)]
     private ?string $justifie = null;
 
+    #[ORM\ManyToOne(inversedBy: 'absences')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Etudiant $etudiant = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,18 @@ class Absence
     public function setJustifie(string $justifie): static
     {
         $this->justifie = $justifie;
+
+        return $this;
+    }
+
+    public function getEtudiant(): ?Etudiant
+    {
+        return $this->etudiant;
+    }
+
+    public function setEtudiant(?Etudiant $etudiant): static
+    {
+        $this->etudiant = $etudiant;
 
         return $this;
     }

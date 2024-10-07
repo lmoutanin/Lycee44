@@ -119,40 +119,35 @@ class EtudiantController extends AbstractController
     #[Route('/etudiant/create', name: 'etudiant_new')]
     public function saisirEtudiant(
         Request $request,
-        EntityManagerInterface $entityManager,
-        ManagerRegistry $doctrine
+        EntityManagerInterface $entityManager
     ) {
         // Création du formulaire
         $form = $this->createForm(SaisirEtudiantType::class);
         $form->handleRequest($request);
 
         $id = $request->get('id');
-      
+
 
         // Si id de étudiant n'existe pas créé un nouvelle étudiant 
-        
 
-            if (($request->getMethod() == 'POST') && ($form->isValid())) {
-                $etudiant = $form->getData();
-                $entityManager->persist($etudiant);
-                $entityManager->flush();
-                $etudiant = new Etudiant();
-                $form = $this->createForm(SaisirEtudiantType::class, $etudiant);
-            }
 
-            // Si le formulaire n'a pas été soumis ou est invalide, affiche le formulaire
-            return $this->render('etudiant/createEtudiant.html.twig', [
-                'form' => $form->createView(),
-                'etudiant' => $vide = null,
-                'id' => $id
-            ]);
-        
-        
+        if (($request->getMethod() == 'POST') && ($form->isValid())) {
+            $etudiant = $form->getData();
+            $entityManager->persist($etudiant);
+            $entityManager->flush();
+            $etudiant = new Etudiant();
+            $form = $this->createForm(SaisirEtudiantType::class, $etudiant);
+        }
+
+        // Si le formulaire n'a pas été soumis ou est invalide, affiche le formulaire
+        return $this->render('etudiant/createEtudiant.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
 
 
-//Il faut place ce block de code en dernier .Parce que ce dernier va crée des probléme de route il faudra ajouter id à la fin 
+    //Il faut place ce block de code en dernier .Parce que ce dernier va crée des probléme de route il faudra ajouter id à la fin 
     #[Route('/etudiant/{id}', name: 'etudiant_id')]
     public function afficher(ManagerRegistry $doctrine, int $id): Response
 
