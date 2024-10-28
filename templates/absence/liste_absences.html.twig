@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
-{% block title %}Ajouter une Absence
+{% block title %}LISTE DES ABSENCE
 {% endblock %}
 
 {% block body %}
 	<style>
-		h1  {
+		h1 {
 			text-align: center;
 		}
-		table{
+		table {
 			margin-left: auto;
-  			margin-right: auto;
+			margin-right: auto;
 		}
 		table {
 			border-collapse: collapse;
@@ -56,6 +56,8 @@
 				<th scope="col">DATE</th>
 				<th scope="col">MATIÉRE</th>
 				<th scope="col">JUSTIFICATION</th>
+				<th scope="col">NOM</th>
+				<th scope="col">PRENOM</th>
 
 
 			</tr>
@@ -67,9 +69,15 @@
 					<td>{{ absence.date|date('d/m/Y') }}</td>
 					<td>{{ absence.matiere}}</td>
 					<td>{{ absence.justifie ? 'Oui' : 'Non' }}</td>
+					<td>{{ absence.etudiant.nom}}</td>
+					<td>{{ absence.etudiant.prenom}}</td>
 
 				</tr>
 			{% endfor %}
 		</tbody>
 	</thead>
-</tbody></table>{% endblock %}
+</tbody>
+</table>
+
+
+{% endblock %}

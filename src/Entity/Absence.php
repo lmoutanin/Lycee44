@@ -20,7 +20,7 @@ class Absence
     #[ORM\Column(length: 100)]
     private ?string $matiere = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, nullable: true)]
     private ?string $justifie = null;
 
     #[ORM\ManyToOne(inversedBy: 'absences')]

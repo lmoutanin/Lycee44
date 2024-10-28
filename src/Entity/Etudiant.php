@@ -37,6 +37,9 @@ class Etudiant
     #[ORM\OneToMany(targetEntity: Absence::class, mappedBy: 'etudiant')]
     private Collection $absences;
 
+    #[ORM\Column(length: 255)]
+    private ?string $classe = null;
+
     public function __construct()
     {
         $this->absences = new ArrayCollection();
@@ -133,6 +136,24 @@ class Etudiant
                 $absence->setEtudiant(null);
             }
         }
+
+        return $this;
+    }
+
+
+    public function __toString()
+    {
+        return $this->nom;
+    }
+
+    public function getClasse(): ?string
+    {
+        return $this->classe;
+    }
+
+    public function setClasse(string $classe): static
+    {
+        $this->classe = $classe;
 
         return $this;
     }

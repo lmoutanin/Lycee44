@@ -6,6 +6,7 @@ use App\Repository\EtudiantRepository;
 use App\Entity\Etudiant;
 use App\Entity\Absence;
 use App\Form\SaisirAbsenceType;
+use App\Form\RechercherAbsencesType;
 use App\Repository\AbsenceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,6 @@ class AbsenceController extends AbstractController
         // Créer le formulaire d'absence en associant l'objet $absence
         $form = $this->createForm(SaisirAbsenceType::class);
         $form->handleRequest($request);
-
 
         if (($request->getMethod() == 'POST') && ($form->isValid())) {
 
@@ -61,12 +61,44 @@ class AbsenceController extends AbstractController
         $absence = $absenceRepository->findAll();  // SELECT * FROM etudiant
 
 
-
-
-
         return $this->render('absence/liste_absences.html.twig', [
             'absences' => $absence
 
+        ]);
+    }
+
+
+
+    #[Route('/absence/rechercher', name: 'rechercher_absences')]
+    public function rechercherAbsences(
+        Request $request,
+        EtudiantRepository $etudiantRepository,
+        AbsenceRepository $absenceRepository
+    ): Response {
+        // Création du formulaire
+        $form = $this->createForm(RechercherAbsencesType::class);
+        $form->handleRequest($request);
+
+        $absences = [];
+        $etudiant = null;
+        $formSubmitted = false;
+
+        // Vérification de la soumission et de la validité du formulaire
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formSubmitted = true; // Le formulaire a été soumis
+            $data = $form->getData();
+            $etudiant = $etudiantRepository->findOneBy(['nom' => $data['nom']]);
+
+            if ($etudiant) {
+                $absences = $absenceRepository->findBy(['etudiant' => $etudiant]);
+            }
+        }
+
+        return $this->render('absence/rechercher_absences.html.twig', [
+            'form' => $form->createView(),
+            'absences' => $absences,
+            'etudiant' => $etudiant,
+            'formSubmitted' => $formSubmitted,
         ]);
     }
 }
