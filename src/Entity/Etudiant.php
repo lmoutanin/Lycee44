@@ -25,8 +25,7 @@ class Etudiant
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $naissance = null;
 
-    #[ORM\Column]
-    private ?int $niveau = null;
+
 
     #[ORM\Column(length: 100)]
     private ?string $mail = null;
@@ -86,17 +85,6 @@ class Etudiant
         return $this;
     }
 
-    public function getNiveau(): ?int
-    {
-        return $this->niveau;
-    }
-
-    public function setNiveau(int $niveau): static
-    {
-        $this->niveau = $niveau;
-
-        return $this;
-    }
 
     public function getMail(): ?string
     {

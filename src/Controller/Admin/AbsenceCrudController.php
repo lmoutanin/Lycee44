@@ -30,7 +30,7 @@ class AbsenceCrudController extends AbstractCrudController
             BooleanField::new('justifie')->setFormTypeOption('label', 'Justifié'),
             AssociationField::new('etudiant')
                 ->setRequired(true)
-                ->setFormTypeOption('choice_label', fn($etudiant) => $etudiant->getPrenom() . ' ' . $etudiant->getNom() . ' (' . $etudiant->getClasse() . ')')
+               
                 ->setFormTypeOption('placeholder', 'Choisissez un étudiant')
         ];
     }
