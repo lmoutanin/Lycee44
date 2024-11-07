@@ -27,8 +27,9 @@ class Classe
     #[ORM\Column]
     private ?int $effectif_max = null;
 
-    #[ORM\OneToOne(mappedBy: 'classe', cascade: ['persist', 'remove'])]
-    private ?Etudiant $etudiant = null;
+   
+
+
 
 
 
@@ -85,20 +86,11 @@ class Classe
         return $this;
     }
 
-    public function getEtudiant(): ?Etudiant
+
+
+    public function __toString()
     {
-        return $this->etudiant;
+        return $this->libelle;
     }
-
-    public function setEtudiant(Etudiant $etudiant): static
-    {
-        // set the owning side of the relation if necessary
-        if ($etudiant->getClasse() !== $this) {
-            $etudiant->setClasse($this);
-        }
-
-        $this->etudiant = $etudiant;
-
-        return $this;
-    }
+ 
 }

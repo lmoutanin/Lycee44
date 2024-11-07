@@ -24,7 +24,7 @@ class Matiere
     #[ORM\Column]
     private ?int $nbHeure = null;
 
-  
+
 
     /**
      * @var Collection<int, Absence>
@@ -78,7 +78,7 @@ class Matiere
         return $this;
     }
 
-  
+
 
     /**
      * @return Collection<int, Absence>
@@ -105,5 +105,9 @@ class Matiere
         }
 
         return $this;
+    }
+    public function __toString()
+    {
+        return $this->nom;
     }
 }

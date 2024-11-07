@@ -39,10 +39,6 @@ class Etudiant
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Classe $classe = null;
 
-    #[ORM\OneToOne(inversedBy: 'etudiant', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-
-
 
 
     public function __construct()

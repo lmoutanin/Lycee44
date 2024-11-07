@@ -26,6 +26,7 @@ class Absence
     #[ORM\JoinColumn(nullable: false)]
     private ?Etudiant $etudiant = null;
 
+
     /**
      * @var Collection<int, Matiere>
      */
@@ -86,6 +87,13 @@ class Absence
     public function getMatiere(): Collection
     {
         return $this->matiere;
+    }
+
+    public function setMatiere(Matiere $matiere): static
+    {
+        $this->matiere = $matiere;
+
+        return $this;
     }
 
     public function addMatiere(Matiere $matiere): static
