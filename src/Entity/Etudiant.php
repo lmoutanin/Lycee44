@@ -36,9 +36,12 @@ class Etudiant
     #[ORM\OneToMany(targetEntity: Absence::class, mappedBy: 'etudiant')]
     private Collection $absences;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Classe $classe = null;
+
     #[ORM\OneToOne(inversedBy: 'etudiant', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Classe $classe = null;
+
 
 
 
@@ -142,7 +145,7 @@ class Etudiant
         return $this->classe;
     }
 
-    public function setClasse(Classe $classe): static
+    public function setClasse(?Classe $classe): static
     {
         $this->classe = $classe;
 

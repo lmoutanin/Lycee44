@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Etudiant;
 use App\Entity\Absence;
+use App\Entity\Classe;
+use App\Entity\Matiere;
+
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 class DashboardController extends AbstractDashboardController
@@ -35,5 +38,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linktoRoute('Accueil', 'fas fa-home', 'app_absence');
         yield MenuItem::linkToCrud('Etudiants', 'fas fa-solid fa-user', Etudiant::class);
         yield MenuItem::linkToCrud('Absences', 'fas  fa-head-side-mask', Absence::class);
+        yield MenuItem::linkToCrud('Classes', 'fas fa-solid fa-user', Classe::class);
+        yield MenuItem::linkToCrud('Matieres', 'fas fa-solid fa-user', Matiere::class);
     }
 }
