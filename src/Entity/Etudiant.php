@@ -45,8 +45,11 @@ class Etudiant
     #[ORM\OneToMany(targetEntity: Absence::class, mappedBy: 'etudiant')]
     private Collection $absences;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'etudiants')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Classe $classe = null;
+
+ 
 
 
 
@@ -139,7 +142,6 @@ class Etudiant
         return $this;
     }
 
-
     public function __toString()
     {
         return $this->nom;
@@ -156,4 +158,7 @@ class Etudiant
 
         return $this;
     }
+
+    
+  
 }

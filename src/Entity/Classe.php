@@ -29,6 +29,17 @@ class Classe
     #[ORM\Column]
     private ?int $effectif_max = null;
 
+    /**
+     * @var Collection<int, Etudiant>
+     */
+    #[ORM\OneToMany(targetEntity: Etudiant::class, mappedBy: 'classe')]
+    private Collection $etudiants;
+
+    public function __construct()
+    {
+        $this->etudiants = new ArrayCollection();
+    }
+
    
 
 
@@ -93,6 +104,36 @@ class Classe
     public function __toString()
     {
         return $this->libelle;
+    }
+
+    /**
+     * @return Collection<int, Etudiant>
+     */
+    public function getEtudiants(): Collection
+    {
+        return $this->etudiants;
+    }
+
+    public function addEtudiant(Etudiant $etudiant): static
+    {
+        if (!$this->etudiants->contains($etudiant)) {
+            $this->etudiants->add($etudiant);
+            $etudiant->setClasse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEtudiant(Etudiant $etudiant): static
+    {
+        if ($this->etudiants->removeElement($etudiant)) {
+            // set the owning side to null (unless already changed)
+            if ($etudiant->getClasse() === $this) {
+                $etudiant->setClasse(null);
+            }
+        }
+
+        return $this;
     }
  
  
