@@ -6,6 +6,7 @@ use App\Repository\EtudiantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EtudiantRepository::class)]
@@ -16,18 +17,26 @@ class Etudiant
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Le nom ne peut pas être vide.")]
+   
+    #[Assert\Regex(pattern: "/^[A-Za-z]+(-|\s|)[A-Za-z]+$/", message: "Seuls les lettre et le -")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom ne peut pas être vide.")]
+    #[Assert\Regex(pattern: "/^[A-Za-z]+(-|\s|)[A-Za-z]+$/", message: "Seuls les lettre et le -")]
     private ?string $prenom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\LessThan("today", message: "La date doit être dans le passé.")]
     private ?\DateTimeInterface $naissance = null;
 
 
 
     #[ORM\Column(length: 100)]
+    #[Assert\Email(message: "Adresse email invalide : ''.")]
+    #[Assert\NotBlank(message: "Le champ ne peut pas être vide.")]
     private ?string $mail = null;
 
     /**

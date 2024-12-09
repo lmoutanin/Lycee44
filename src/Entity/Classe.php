@@ -6,6 +6,7 @@ use App\Repository\ClasseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClasseRepository::class)]
 class Classe
@@ -16,6 +17,7 @@ class Classe
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Regex(pattern: "/^[A-Z]{3}[1-2]$/", message: "3 lettres majuscules et un chiffre .")]
     private ?string $libelle = null;
 
     #[ORM\Column]
@@ -92,5 +94,6 @@ class Classe
     {
         return $this->libelle;
     }
+ 
  
 }

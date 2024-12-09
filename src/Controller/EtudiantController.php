@@ -12,10 +12,25 @@ use App\Repository\EtudiantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\SaisirEtudiantType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 
 class EtudiantController extends AbstractController
 {
+
+    private ValidatorInterface $validator;
+
+    public function __construct(ValidatorInterface $validator)
+    {
+        $this->validator = $validator; // On assigne le validateur à la propriété de classe
+    }
+    
+    private function validerEtudiant(Etudiant $etudiant): ConstraintViolationListInterface
+    {
+        // Utilise le validateur Symfony pour valider les contraintes définies dans l'entité Étudiant
+        return $this->validator->validate($etudiant);
+    }
 
     #[Route('/etudiant/creer/', name: 'etudiant_creer')]
     public function createEtudiant(ManagerRegistry $doctrine): Response
@@ -117,34 +132,56 @@ class EtudiantController extends AbstractController
     }
 
     #[Route('/etudiant/create', name: 'etudiant_new')]
-    public function saisirEtudiant(
-        Request $request,
-        EntityManagerInterface $entityManager
-    ) {
-        // Création du formulaire
-        $form = $this->createForm(SaisirEtudiantType::class);
-        $form->handleRequest($request);
+    public function saisirEtudiant(Request $request, EntityManagerInterface $entityManager): Response
+{
+    // Création d'un nouvel étudiant vide
+    $etudiant = new Etudiant();
 
-        $id = $request->get('id');
+    // Création du formulaire
+    $form = $this->createForm(SaisirEtudiantType::class, $etudiant);
 
+    // Gestion de la requête
+    $form->handleRequest($request);
 
-        // Si id de étudiant n'existe pas créé un nouvelle étudiant 
+    // Si le formulaire est soumis
+    if ($form->isSubmitted()) {
+        // Appelle la méthode de validation
+        $violations = $this->validerEtudiant($etudiant);
 
+        // Si des violations sont détectées
+        if (count($violations) > 0) {
+            // Rassemble les messages d'erreur dans une chaîne
+            $errors = [];
+            foreach ($violations as $violation) {
+                $errors[] = $violation->getPropertyPath() . ': ' . $violation->getMessage();
+            }
 
-        if (($request->getMethod() == 'POST') && ($form->isValid())) {
-            $etudiant = $form->getData();
-            $entityManager->persist($etudiant);
-            $entityManager->flush();
-            $etudiant = new Etudiant();
-            $form = $this->createForm(SaisirEtudiantType::class, $etudiant);
+            // Retourne une réponse contenant les erreurs
+            return $this->render('etudiant/createEtudiant.html.twig', [
+                'form' => $form->createView(),
+                'errors' => $errors,
+            ]);
         }
 
-        // Si le formulaire n'a pas été soumis ou est invalide, affiche le formulaire
-        return $this->render('etudiant/createEtudiant.html.twig', [
-            'form' => $form->createView()
-        ]);
+        // Si tout est valide, sauvegarde l'étudiant dans la base de données
+        if ($form->isValid()) {
+            $entityManager->persist($etudiant);
+            $entityManager->flush();
+
+            // Redirection ou message de confirmation
+            return new Response('Etudiant sauvegardé avec succès, son ID est : ' . $etudiant->getId());
+            // return $this->redirectToRoute('etudiant_afficher', ['id' => $etudiant->getId()]);
+        }
     }
 
+    // Affichage du formulaire (si non soumis ou non valide)
+    return $this->render('etudiant/createEtudiant.html.twig', [
+        'form' => $form->createView(),
+        'errors' => [], // Pas d'erreurs à afficher au premier affichage
+    ]);
+}
+
+    
 
 
     //Il faut place ce block de code en dernier .Parce que ce dernier va crée des probléme de route il faudra ajouter id à la fin 

@@ -37,8 +37,7 @@ class EtudiantCrudController extends AbstractCrudController
             DateField::new('naissance')->setRequired(true),
             TextField::new('mail')->setRequired(true),
             AssociationField::new('classe')
-                ->setRequired(false)
-                ->setFormTypeOption('placeholder', 'Choisissez un classe')
+           
         ];
     }
 }
