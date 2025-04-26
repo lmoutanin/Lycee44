@@ -144,7 +144,7 @@ class Etudiant
 
     public function __toString()
     {
-        return $this->nom;
+        return $this->prenom . " " . $this->nom;
     }
 
     public function getClasse(): ?Classe

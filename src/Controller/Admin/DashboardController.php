@@ -24,7 +24,7 @@ class DashboardController extends AbstractDashboardController
 
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
         // Option 1. You can make your dashboard redirect to some common page of your backend
-        return $this->redirect($adminUrlGenerator->setController(AbsenceCrudController::class)->generateUrl());
+        return $this->redirect($adminUrlGenerator->setController(EtudiantCrudController::class)->generateUrl());
     }
 
     public function configureDashboard(): Dashboard

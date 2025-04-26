@@ -34,7 +34,7 @@ class AbsenceCrudController extends AbstractCrudController
     {
         return [
             DateField::new('date')->setRequired(true),
-            BooleanField::new('justifie')->setFormTypeOption('label', 'Justifié'),
+            TextField::new('justifie'),
             AssociationField::new('etudiant')
                 ->setRequired(true)
                 ->setFormTypeOption('placeholder', 'Choisissez un étudiant'),
